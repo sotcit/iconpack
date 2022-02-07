@@ -14,8 +14,8 @@ import androidx.core.view.WindowCompat
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import app.iconpack.ui.layout.Export
-import app.iconpack.ui.layout.Home
+import app.iconpack.ui.export.Export
+import app.iconpack.ui.home.Home
 import app.iconpack.ui.theme.IconPackTheme
 import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.insets.statusBarsHeight
