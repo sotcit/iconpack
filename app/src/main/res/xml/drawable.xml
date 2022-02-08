@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+    <category title="ALL"/>
+    <item applicationLabel="冰箱" drawable="app_icebox"/>
+    <item applicationLabel="图标包" drawable="app_iconpack"/>
+    <item applicationLabel="LibChecker" drawable="com_absinthe_libchecker"/>
+    <item applicationLabel="DingTalk" drawable="com_alibaba_android_rimet"/>
+    <item applicationLabel="文件" drawable="com_android_documentsui"/>
+    <item applicationLabel="设置" drawable="com_android_settings"/>
+    <item applicationLabel="Google Play 商店" drawable="com_android_vending"/>
+    <item applicationLabel="酷安" drawable="com_coolapk_market"/>
+    <item applicationLabel="纯纯写作" drawable="com_drakeet_purewriter"/>
+    <item applicationLabel="岁月相册" drawable="com_drakeet_years"/>
+    <item applicationLabel="支付宝" drawable="com_eg_android_alipaygphone"/>
+    <item applicationLabel="FV悬浮球" drawable="com_fooview_android_fooview"/>
+    <item applicationLabel="Clash for Android" drawable="com_github_kr328_clash"/>
+    <item applicationLabel="Clipboard Whitelist" drawable="com_github_kr328_clipboard"/>
+    <item applicationLabel="信息" drawable="com_google_android_apps_messaging"/>
+    <item applicationLabel="计算器" drawable="com_google_android_calculator"/>
+    <item applicationLabel="日历" drawable="com_google_android_calendar"/>
+    <item applicationLabel="通讯录" drawable="com_google_android_contacts"/>
+    <item applicationLabel="时钟" drawable="com_google_android_deskclock"/>
+    <item applicationLabel="电话" drawable="com_google_android_dialer"/>
+    <item applicationLabel="Gboard" drawable="com_google_android_inputmethod_latin"/>
+    <item applicationLabel="贴吧 Lite" drawable="com_huanchengfly_tieba_post"/>
+    <item applicationLabel="京东" drawable="com_jingdong_app_mall"/>
+    <item applicationLabel="Z直播" drawable="com_linroid_zlive"/>
+    <item applicationLabel="Office" drawable="com_microsoft_office_officehubrow"/>
+    <item applicationLabel="歌词适配" drawable="com_mylrc_mymusic"/>
+    <item applicationLabel="同文输入法" drawable="com_osfans_trime"/>
+    <item applicationLabel="椒盐音乐" drawable="com_salt_music"/>
+    <item applicationLabel="英雄联盟手游" drawable="com_tencent_lolm"/>
+    <item applicationLabel="微信" drawable="com_tencent_mm"/>
+    <item applicationLabel="QQ" drawable="com_tencent_mobileqq"/>
+    <item applicationLabel="Magisk" drawable="com_topjohnwu_magisk"/>
+    <item applicationLabel="云闪付" drawable="com_unionpay"/>
+    <item applicationLabel="Bitwarden" drawable="com_x8bit_bitwarden"/>
+    <item applicationLabel="音乐标签" drawable="com_xjcheng_musictageditor"/>
+    <item applicationLabel="月圆之夜" drawable="com_ztgame_yyzy"/>
+    <item applicationLabel="App Manager" drawable="io_github_muntashirakon_appmanager"/>
+    <item applicationLabel="阅读" drawable="io_legado_app_release"/>
+    <item applicationLabel="白马地图" drawable="me_gfuil_bmap"/>
+    <item applicationLabel="Shizuku" drawable="moe_shizuku_privileged_api"/>
+    <item applicationLabel="Bromite" drawable="org_bromite_bromite"/>
+    <item applicationLabel="KDE Connect" drawable="org_kde_kdeconnect_tp"/>
+    <item applicationLabel="NewPipe" drawable="org_schabi_newpipe"/>
+    <item applicationLabel="Swift Backup" drawable="org_swiftapps_swiftbackup"/>
+    <item applicationLabel="Telegram" drawable="org_telegram_messenger"/>
+    <item applicationLabel="QuickSwitch" drawable="xyz_paphonb_quickstepswitcher"/>
+</resources>

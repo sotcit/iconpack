@@ -1,11 +1,10 @@
 package app.iconpack
 
-import android.content.Context
 import android.content.Intent
 import android.content.res.XmlResourceParser
-import android.net.Uri
 import androidx.core.content.FileProvider
 import androidx.core.content.res.ResourcesCompat
+import org.w3c.dom.Document
 import org.xmlpull.v1.XmlPullParser
 import java.io.File
 import javax.xml.parsers.DocumentBuilderFactory
@@ -97,10 +96,23 @@ object Util {
         )
     }
 
-    fun exportXml(installedPackagesInfo: MutableList<InstalledPackageInfo>) {
+    /**
+     * 初始化一个空的 xml 文件，用于构建 appfilter.xml 及 drawable.xml
+     * @return 返回空的 xml 文件
+     */
+    private fun newEmptyXmlDocument(): Document {
         val factory = DocumentBuilderFactory.newInstance()
         val builder = factory.newDocumentBuilder()
-        val document = builder.newDocument()
+        return builder.newDocument()
+    }
+
+    /**
+     * 根据 installedPackagesInfo 构建 appfilter.xml Document
+     * @param installedPackagesInfo 用户应用信息
+     * @return 返回构建好的 Document
+     */
+    private fun buildAppFilterXmlDocument(installedPackagesInfo: MutableList<InstalledPackageInfo>): Document {
+        val document = newEmptyXmlDocument()
         val resources = document.createElement("resources")
         installedPackagesInfo.forEach {
             val item = document.createElement("item")
@@ -117,37 +129,46 @@ object Util {
             resources.appendChild(item)
         }
         document.appendChild(resources)
-        val transformer =
-            TransformerFactory.newInstance().newTransformer()
-        val dirPath = "${app.filesDir.absolutePath}/export"
-        if (deleteDir(dirPath = dirPath) && createDir(dirPath = dirPath)) {
-            File(dirPath, "appfilter.xml").run {
-                transformer.transform(
-                    DOMSource(document), StreamResult(this)
-                )
-                FileProvider.getUriForFile(app, "app.iconpack.fileprovider", this).run {
-                    shareFile(app, this)
-                }
-            }
-        }
+        return document
     }
 
     /**
-     * 创建指定目录
+     * 根据 installedPackagesInfo 构建 drawable.xml Document
+     * @param installedPackagesInfo 用户应用信息
+     * @return 返回构建好的 Document
      */
-    fun createDir(dirPath: String): Boolean {
-        File(dirPath).run {
-            this.mkdirs()
-            return this.exists()
+    private fun buildDrawableXmlDocument(installedPackagesInfo: MutableList<InstalledPackageInfo>): Document {
+        val document = newEmptyXmlDocument()
+        val resources = document.createElement("resources")
+        val category = document.createElement("category")
+        category.setAttribute("title", "ALL")
+        resources.appendChild(category)
+        installedPackagesInfo.forEach {
+            val item = document.createElement("item")
+            item.setAttribute(
+                "applicationLabel",
+                it.applicationLabel
+            )
+            item.setAttribute(
+                "drawable",
+                it.packageName.lowercase().replace(".", "_")
+            )
+            resources.appendChild(item)
         }
+        document.appendChild(resources)
+        return document
     }
 
     /**
      * 删除指定目录及其下文件
+     * @param dir 目录
+     * @return 目录不存在返回 true
      */
-    fun deleteDir(dirPath: String): Boolean {
-        File(dirPath).run {
-            this.listFiles().run {
+    private fun deleteDir(dir: File): Boolean {
+        return if (!dir.exists()) {
+            !dir.exists()
+        } else {
+            dir.listFiles().run {
                 if (this != null) {
                     for (file in this) {
                         if (file.isFile) {
@@ -156,37 +177,80 @@ object Util {
                     }
                 }
             }
-            this.delete()
-            return !this.exists()
+            dir.delete()
+            !dir.exists()
         }
     }
 
-    fun createFile() {
-        val intent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
-            addCategory(Intent.CATEGORY_OPENABLE)
-            type = "application/xml"
-            putExtra(Intent.EXTRA_TITLE, File(app.filesDir, "appfilter.xml"))
+    /**
+     *创建指定目录
+     * @param dir 目录
+     * @return 目录存在返回 true
+     */
+    private fun createDir(dir: File): Boolean {
+        return if (dir.exists()) {
+            dir.exists()
+        } else {
+            dir.mkdirs()
+            dir.exists()
         }
-//        app.openFileOutput("aa", Context.MODE_PRIVATE).use {
-//            it.write("a11111".toByteArray())
-//        }
+    }
+
+    /**
+     * 保存 xml 文件到指定目录
+     * @param document xml 文件
+     * @param dir 目录
+     * @param xmlFile xml 文件
+     */
+    private fun saveXmlFile(document: Document, dir: File, xmlFile: File) {
+        if (deleteDir(dir = dir) && createDir(dir = dir)) {
+            TransformerFactory.newInstance().newTransformer()
+                .transform(DOMSource(document), StreamResult(xmlFile))
+        }
     }
 
     /**
      * 分享文件
+     * @param file 要分享的文件
      */
-    fun shareFile(context: Context, uri: Uri) {
+    private fun shareFile(file: File) {
+        val uriForFile = FileProvider.getUriForFile(app, "app.iconpack.fileprovider", file)
         val intent = Intent(Intent.ACTION_SEND).apply {
-            this.putExtra(Intent.EXTRA_STREAM, uri)
-            this.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            this.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-            this.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
-            this.setDataAndType(uri, "text/xml")
+            putExtra(Intent.EXTRA_STREAM, uriForFile)
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+            setDataAndType(uriForFile, "text/xml")
         }
         val chooserIntent: Intent = Intent.createChooser(intent, "分享文件").apply {
             this.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         }
-        context.startActivity(chooserIntent)
+        app.startActivity(chooserIntent)
     }
 
+    /**
+     * 保存并分享 appfilter.xml 文件
+     * @param installedPackagesInfo 用户应用信息
+     */
+    fun saveAndShareAppFilterXmlFile(installedPackagesInfo: MutableList<InstalledPackageInfo>) {
+        val dirPath = "${app.filesDir.absolutePath}/export"
+        val document = buildAppFilterXmlDocument(installedPackagesInfo)
+        val dir = File(dirPath)
+        val xmlFile = File(dirPath, "appfilter.xml")
+        saveXmlFile(document = document, dir = dir, xmlFile = xmlFile)
+        shareFile(xmlFile)
+    }
+
+    /**
+     * 保存并分享 drawable.xml 文件
+     * @param installedPackagesInfo 用户应用信息
+     */
+    fun saveAndShareDrawableXmlFile(installedPackagesInfo: MutableList<InstalledPackageInfo>) {
+        val dirPath = "${app.filesDir.absolutePath}/export"
+        val document = buildDrawableXmlDocument(installedPackagesInfo)
+        val dir = File(dirPath)
+        val xmlFile = File(dirPath, "drawable.xml")
+        saveXmlFile(document = document, dir = dir, xmlFile = xmlFile)
+        shareFile(xmlFile)
+    }
 }

@@ -3,8 +3,9 @@ package app.iconpack.ui.export
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
-import app.iconpack.Util.exportXml
 import app.iconpack.Util.getPackage
+import app.iconpack.Util.saveAndShareAppFilterXmlFile
+import app.iconpack.Util.saveAndShareDrawableXmlFile
 import app.iconpack.ui.layout.FloatingButton
 import app.iconpack.ui.layout.InstalledPackageColumn
 import app.iconpack.ui.layout.TopBar
@@ -25,7 +26,8 @@ fun Export(navController: NavController) {
         },
         floatingActionButton = {
             FloatingButton {
-                exportXml(installedPackagesInfo = installedPackagesInfo)
+//                saveAndShareAppFilterXmlFile(installedPackagesInfo = installedPackagesInfo)
+                saveAndShareDrawableXmlFile(installedPackagesInfo = installedPackagesInfo)
             }
         }
     )
