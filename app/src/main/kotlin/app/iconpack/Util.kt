@@ -1,7 +1,10 @@
 package app.iconpack
 
+import android.content.Context
 import android.content.Intent
 import android.content.res.XmlResourceParser
+import android.net.Uri
+import androidx.core.content.FileProvider
 import androidx.core.content.res.ResourcesCompat
 import org.xmlpull.v1.XmlPullParser
 import java.io.File
@@ -116,11 +119,46 @@ object Util {
         document.appendChild(resources)
         val transformer =
             TransformerFactory.newInstance().newTransformer()
-        transformer.transform(
-            DOMSource(document), StreamResult(
-                File(app.filesDir, "appfilter.xml")
-            )
-        )
+        val dirPath = "${app.filesDir.absolutePath}/export"
+        if (deleteDir(dirPath = dirPath) && createDir(dirPath = dirPath)) {
+            File(dirPath, "appfilter.xml").run {
+                transformer.transform(
+                    DOMSource(document), StreamResult(this)
+                )
+                FileProvider.getUriForFile(app, "app.iconpack.fileprovider", this).run {
+                    shareFile(app, this)
+                }
+            }
+        }
+    }
+
+    /**
+     * 创建指定目录
+     */
+    fun createDir(dirPath: String): Boolean {
+        File(dirPath).run {
+            this.mkdirs()
+            return this.exists()
+        }
+    }
+
+    /**
+     * 删除指定目录及其下文件
+     */
+    fun deleteDir(dirPath: String): Boolean {
+        File(dirPath).run {
+            this.listFiles().run {
+                if (this != null) {
+                    for (file in this) {
+                        if (file.isFile) {
+                            file.delete()
+                        }
+                    }
+                }
+            }
+            this.delete()
+            return !this.exists()
+        }
     }
 
     fun createFile() {
@@ -132,6 +170,23 @@ object Util {
 //        app.openFileOutput("aa", Context.MODE_PRIVATE).use {
 //            it.write("a11111".toByteArray())
 //        }
+    }
+
+    /**
+     * 分享文件
+     */
+    fun shareFile(context: Context, uri: Uri) {
+        val intent = Intent(Intent.ACTION_SEND).apply {
+            this.putExtra(Intent.EXTRA_STREAM, uri)
+            this.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            this.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            this.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+            this.setDataAndType(uri, "text/xml")
+        }
+        val chooserIntent: Intent = Intent.createChooser(intent, "分享文件").apply {
+            this.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        }
+        context.startActivity(chooserIntent)
     }
 
 }
