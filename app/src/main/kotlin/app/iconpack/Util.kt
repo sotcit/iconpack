@@ -7,6 +7,9 @@ import androidx.core.content.res.ResourcesCompat
 import org.w3c.dom.Document
 import org.xmlpull.v1.XmlPullParser
 import java.io.File
+import java.io.FileOutputStream
+import java.util.zip.ZipEntry
+import java.util.zip.ZipOutputStream
 import javax.xml.parsers.DocumentBuilderFactory
 import javax.xml.transform.TransformerFactory
 import javax.xml.transform.dom.DOMSource
@@ -199,13 +202,23 @@ object Util {
     /**
      * 保存 xml 文件到指定目录
      * @param document xml 文件
-     * @param dir 目录
      * @param xmlFile xml 文件
      */
-    private fun saveXmlFile(document: Document, dir: File, xmlFile: File) {
-        if (deleteDir(dir = dir) && createDir(dir = dir)) {
-            TransformerFactory.newInstance().newTransformer()
-                .transform(DOMSource(document), StreamResult(xmlFile))
+    private fun saveXmlFile(document: Document, xmlFile: File) {
+        TransformerFactory.newInstance().newTransformer()
+            .transform(DOMSource(document), StreamResult(xmlFile))
+    }
+
+    private fun zipFile(input: File, output: File) {
+        val zipOutputStream = ZipOutputStream(FileOutputStream(output))
+        input.listFiles().run {
+            if (this != null) {
+                for (xml in this) {
+                    zipOutputStream.putNextEntry(ZipEntry(xml.name))
+                    zipOutputStream.write(xml.readBytes())
+                    zipOutputStream.closeEntry()
+                }
+            }
         }
     }
 
@@ -220,7 +233,7 @@ object Util {
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
             addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
-            setDataAndType(uriForFile, "text/xml")
+            setDataAndType(uriForFile, "application/zip")
         }
         val chooserIntent: Intent = Intent.createChooser(intent, "分享文件").apply {
             this.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -228,29 +241,23 @@ object Util {
         app.startActivity(chooserIntent)
     }
 
-    /**
-     * 保存并分享 appfilter.xml 文件
-     * @param installedPackagesInfo 用户应用信息
-     */
-    fun saveAndShareAppFilterXmlFile(installedPackagesInfo: MutableList<InstalledPackageInfo>) {
+    fun saveAndShareRequest(installedPackagesInfo: MutableList<InstalledPackageInfo>) {
         val dirPath = "${app.filesDir.absolutePath}/export"
-        val document = buildAppFilterXmlDocument(installedPackagesInfo)
         val dir = File(dirPath)
-        val xmlFile = File(dirPath, "appfilter.xml")
-        saveXmlFile(document = document, dir = dir, xmlFile = xmlFile)
-        shareFile(xmlFile)
-    }
-
-    /**
-     * 保存并分享 drawable.xml 文件
-     * @param installedPackagesInfo 用户应用信息
-     */
-    fun saveAndShareDrawableXmlFile(installedPackagesInfo: MutableList<InstalledPackageInfo>) {
-        val dirPath = "${app.filesDir.absolutePath}/export"
-        val document = buildDrawableXmlDocument(installedPackagesInfo)
-        val dir = File(dirPath)
-        val xmlFile = File(dirPath, "drawable.xml")
-        saveXmlFile(document = document, dir = dir, xmlFile = xmlFile)
-        shareFile(xmlFile)
+        if (deleteDir(dir = dir) && createDir(dir = dir)) {
+            saveXmlFile(
+                document = buildDrawableXmlDocument(installedPackagesInfo),
+                xmlFile = File(dirPath, "drawable.xml")
+            )
+            saveXmlFile(
+                document = buildAppFilterXmlDocument(installedPackagesInfo),
+                xmlFile = File(dirPath, "appfilter.xml")
+            )
+        }
+        zipFile(
+            File("${app.filesDir.absolutePath}/export"),
+            File(app.filesDir, "export.zip")
+        )
+        shareFile(File(app.filesDir, "export.zip"))
     }
 }

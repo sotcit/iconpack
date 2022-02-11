@@ -24,6 +24,7 @@
     <item applicationLabel="贴吧 Lite" component="ComponentInfo{com.huanchengfly.tieba.post/com.huanchengfly.tieba.post.activities.MainActivity}" drawable="com_huanchengfly_tieba_post" packageName="com.huanchengfly.tieba.post"/>
     <item applicationLabel="京东" component="ComponentInfo{com.jingdong.app.mall/com.jingdong.app.mall.main.MainActivity}" drawable="com_jingdong_app_mall" packageName="com.jingdong.app.mall"/>
     <item applicationLabel="Z直播" component="ComponentInfo{com.linroid.zlive/com.linroid.zlive.screen.host.HostActivity}" drawable="com_linroid_zlive" packageName="com.linroid.zlive"/>
+    <item applicationLabel="Droid-ify" component="ComponentInfo{com.looker.droidify/com.looker.droidify.MainActivity}" drawable="com_looker_droidify" packageName="com.looker.droidify"/>
     <item applicationLabel="Office" component="ComponentInfo{com.microsoft.office.officehubrow/com.microsoft.office.officesuite.OfficeSuiteActivity}" drawable="com_microsoft_office_officehubrow" packageName="com.microsoft.office.officehubrow"/>
     <item applicationLabel="歌词适配" component="ComponentInfo{com.mylrc.mymusic/com.mylrc.mymusic.activity.logo}" drawable="com_mylrc_mymusic" packageName="com.mylrc.mymusic"/>
     <item applicationLabel="同文输入法" component="ComponentInfo{com.osfans.trime/com.osfans.trime.PrefLauncherAlias}" drawable="com_osfans_trime" packageName="com.osfans.trime"/>

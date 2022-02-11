@@ -25,6 +25,7 @@
     <item applicationLabel="贴吧 Lite" drawable="com_huanchengfly_tieba_post"/>
     <item applicationLabel="京东" drawable="com_jingdong_app_mall"/>
     <item applicationLabel="Z直播" drawable="com_linroid_zlive"/>
+    <item applicationLabel="Droid-ify" drawable="com_looker_droidify"/>
     <item applicationLabel="Office" drawable="com_microsoft_office_officehubrow"/>
     <item applicationLabel="歌词适配" drawable="com_mylrc_mymusic"/>
     <item applicationLabel="同文输入法" drawable="com_osfans_trime"/>
