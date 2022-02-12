@@ -210,7 +210,8 @@ object Util {
     }
 
     private fun zipFile(input: File, output: File) {
-        val zipOutputStream = ZipOutputStream(FileOutputStream(output))
+        val fileOutputStream = FileOutputStream(output)
+        val zipOutputStream = ZipOutputStream(fileOutputStream)
         input.listFiles().run {
             if (this != null) {
                 for (xml in this) {
@@ -220,6 +221,8 @@ object Util {
                 }
             }
         }
+        zipOutputStream.close()
+        fileOutputStream.close()
     }
 
     /**
