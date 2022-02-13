@@ -1,2 +1,5 @@
 build/
 release/
+src/main/res/drawable-nodpi/
+src/main/res/xml/appfilter.xml
+src/main/res/xml/drawable.xml
