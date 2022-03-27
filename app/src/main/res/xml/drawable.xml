@@ -48,7 +48,6 @@
     <item applicationLabel="Bromite" drawable="org_bromite_bromite"/>
     <item applicationLabel="KDE Connect" drawable="org_kde_kdeconnect_tp"/>
     <item applicationLabel="AudioFX" drawable="org_lineageos_audiofx"/>
-    <item applicationLabel="NewPipe" drawable="org_schabi_newpipe"/>
     <item applicationLabel="Swift Backup" drawable="org_swiftapps_swiftbackup"/>
     <item applicationLabel="Telegram" drawable="org_telegram_messenger"/>
 </resources>

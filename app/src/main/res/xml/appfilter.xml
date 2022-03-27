@@ -47,7 +47,6 @@
     <item applicationLabel="Bromite" component="ComponentInfo{org.bromite.bromite/com.google.android.apps.chrome.Main}" drawable="org_bromite_bromite" packageName="org.bromite.bromite"/>
     <item applicationLabel="KDE Connect" component="ComponentInfo{org.kde.kdeconnect_tp/org.kde.kdeconnect.UserInterface.MainActivity}" drawable="org_kde_kdeconnect_tp" packageName="org.kde.kdeconnect_tp"/>
     <item applicationLabel="AudioFX" component="ComponentInfo{org.lineageos.audiofx/org.lineageos.audiofx.activity.ActivityMusic}" drawable="org_lineageos_audiofx" packageName="org.lineageos.audiofx"/>
-    <item applicationLabel="NewPipe" component="ComponentInfo{org.schabi.newpipe/org.schabi.newpipe.MainActivity}" drawable="org_schabi_newpipe" packageName="org.schabi.newpipe"/>
     <item applicationLabel="Swift Backup" component="ComponentInfo{org.swiftapps.swiftbackup/org.swiftapps.swiftbackup.intro.IntroActivity}" drawable="org_swiftapps_swiftbackup" packageName="org.swiftapps.swiftbackup"/>
     <item applicationLabel="Telegram" component="ComponentInfo{org.telegram.messenger/org.telegram.ui.LaunchActivity}" drawable="org_telegram_messenger" packageName="org.telegram.messenger"/>
 </resources>
